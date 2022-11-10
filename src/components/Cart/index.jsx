@@ -1,5 +1,5 @@
-import React from "react";
-import CartItem from "../CartItem";
+import React, { useState } from 'react';
+import CartItem from '../CartItem';
 import './style.css';
 
 const products = [
@@ -26,19 +26,32 @@ const products = [
 ];
 
 const Cart = () => {
+  const [cartProducts, setCartProducts] = useState(products);
+
+  const handleAmountChange = (index, newAmount) => {
+    const newProducts = [...cartProducts];
+    newProducts[index].amount = newAmount;
+    setCartProducts(newProducts);
+  };
+
+  let productCount = 0;
+  cartProducts.forEach((product) => (productCount += product.amount));
   return (
     <div className="cart">
       <div className="cart__head">
         <h2>Košík</h2>
-        <span>Položek: 1</span>
+        <span>Položek: {productCount}</span>
       </div>
       <div className="cart__items">
-        {products.map((product) => (
-          <CartItem product={product} />
+        {products.map((product, index) => (
+          <CartItem
+            product={product}
+            onAmountChange={(newAmount) => handleAmountChange(index, newAmount)}
+          />
         ))}
       </div>
     </div>
-  )
+  );
 };
 
 export default Cart;
